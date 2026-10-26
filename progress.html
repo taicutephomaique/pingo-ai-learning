@@ -1,1 +1,127 @@
+from pathlib import Path
+from html import escape
+
+html = r'''<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pingo | Tiến độ học tập</title>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:#202647;background:#f5f7ff}
+*{box-sizing:border-box}body{margin:0}header{background:#fff;border-bottom:1px solid #e6e8f2}
+.nav{max-width:1120px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:18px 22px;flex-wrap:wrap}
+.logo{font-size:26px;font-weight:850;color:#6354df;text-decoration:none}nav{display:flex;gap:16px;flex-wrap:wrap}
+nav a{color:#58617e;text-decoration:none;font-weight:600;font-size:14px}nav a:hover{color:#5945cf}
+main{max-width:1120px;margin:35px auto;padding:0 22px}
+.hero{background:linear-gradient(112deg,#6251dc,#4f8ee8);border-radius:24px;color:white;padding:30px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
+.hero h1{font-size:clamp(26px,4vw,37px);margin:0 0 8px}.hero p{margin:0;color:#f3f4ff}
+button,select{font:inherit}button{cursor:pointer;border:none;border-radius:11px;padding:11px 15px;font-weight:700}
+.refresh{background:#fff;color:#4c42ab}
+.toolbar{margin:22px 0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.toolbar label{font-weight:700}select{border:1px solid #d8dcec;background:#fff;border-radius:12px;padding:10px 14px;color:#253052}
+small,.muted{color:#69738d}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.panel,.stat{background:white;border:1px solid #e6e9f3;border-radius:19px;padding:22px;box-shadow:0 9px 28px #29357308}
+.stat .number{font-size:32px;color:#5e51d8;font-weight:850;margin:12px 0 4px}.stat .label{font-size:14px;color:#607089;font-weight:650}
+.stat p{margin:0;font-size:13px;color:#7b8399}
+.two{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;margin-top:16px}
+h2{margin:0 0 9px;font-size:20px}.help{font-size:13px;color:#68738e;line-height:1.55;margin:0 0 18px}
+.bar-track{height:12px;background:#edeefd;border-radius:30px;overflow:hidden;margin:11px 0 6px}
+.bar{background:linear-gradient(90deg,#6854e5,#4c93eb);height:100%;width:0%;border-radius:30px}
+.flex{display:flex;justify-content:space-between;gap:12px;align-items:center}
+#chart{height:170px;display:flex;align-items:end;gap:12px;border-bottom:1px solid #d9dfee;padding-top:24px;margin-bottom:8px}
+.chart-col{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:end;height:100%;gap:7px}
+.chart-bar{width:min(44px,100%);background:linear-gradient(180deg,#8869ed,#5b96e7);min-height:0;border-radius:9px 9px 0 0}
+.chart-label{font-size:12px;color:#67728d;white-space:nowrap}
+.words{display:flex;gap:8px;flex-wrap:wrap}
+.word{display:inline-block;border-radius:100px;padding:8px 11px;color:#4d46a6;background:#f1efff;font-size:13px;font-weight:700}
+.full{margin-top:16px}.empty{padding:16px 0;color:#7b8399}
+table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:13px 10px;border-bottom:1px solid #edf0f6}th{color:#68738b;font-size:13px}
+.table-wrap{overflow:auto}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.outline{background:#f1efff;color:#5443c4}
+.notice{background:#fffaed;border:1px solid #f0dfb6;color:#79612f;border-radius:14px;padding:14px;margin-top:18px;line-height:1.55;font-size:13px}
+footer{text-align:center;color:#8189a0;font-size:12px;padding:36px 15px}
+@media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}}
+@media(max-width:550px){.stats{grid-template-columns:1fr 1fr;gap:10px}.stat{padding:15px}.stat .number{font-size:27px}.hero{padding:23px}th,td{padding:10px 7px}}
+</style>
+</head>
+<body>
+<header><div class="nav"><a class="logo" href="index.html">🐧 Pingo</a><nav>
+<a href="index.html">Trang chủ</a><a href="vocabulary.html">Từ vựng</a><a href="quiz.html">Trắc nghiệm</a><a href="pronunciation.html">Phát âm</a><a href="progress.html" aria-current="page">Tiến độ</a>
+</nav></div></header>
+<main>
+<section class="hero"><div><h1>📈 Tiến độ học tập</h1><p>Nhìn lại những gì bạn đã học và lên kế hoạch luyện tập tiếp theo.</p></div><button class="refresh" id="refresh">↻ Cập nhật thống kê</button></section>
+<div class="toolbar"><label for="language">Thống kê theo ngôn ngữ</label><select id="language"><option value="all">Cả hai ngôn ngữ</option><option value="en">Tiếng Anh</option><option value="zh">Tiếng Trung</option></select></div>
+<section class="stats" aria-live="polite">
+<div class="stat"><div class="label">📚 Từ vựng đã lưu</div><div class="number" id="savedCount">0</div><p>Đang nằm trong danh sách ôn tập</p></div>
+<div class="stat"><div class="label">📝 Bài Quiz đã làm</div><div class="number" id="quizCount">0</div><p>Số bài đã hoàn thành</p></div>
+<div class="stat"><div class="label">🎯 Tỷ lệ trả lời đúng</div><div class="number" id="accuracy">—</div><p>Tổng câu đúng / tổng câu đã làm</p></div>
+<div class="stat"><div class="label">🏅 Điểm bài gần nhất</div><div class="number" id="lastScore">—</div><p id="lastDetail">Chưa có bài kiểm tra</p></div>
+</section>
+<section class="two">
+<div class="panel"><h2>Kết quả các bài Quiz gần đây</h2><p class="help">Hiển thị tối đa 7 bài gần nhất, theo thang phần trăm.</p><div id="chart" role="img" aria-label="Biểu đồ điểm các bài trắc nghiệm gần đây"></div><p id="chartEmpty" class="empty" hidden>Chưa có dữ liệu. Hãy hoàn thành một bài Quiz trước nhé.</p></div>
+<div class="panel"><h2>Mục tiêu ôn từ vựng</h2><p class="help">Mốc gợi ý: lưu 10 từ để tạo danh sách ôn tập đầu tiên (không phải thước đo năng lực).</p><div class="flex"><strong id="goalText">0 / 10 từ</strong><span id="goalPercent">0%</span></div><div class="bar-track"><div class="bar" id="goalBar"></div></div><p class="help" style="margin-top:17px">Lưu từ mới tại <a href="vocabulary.html">trang Từ vựng</a>.</p><h2 style="margin-top:25px">Các từ đã lưu</h2><div class="words" id="words"></div></div>
+</section>
+<section class="panel full"><h2>📅 Lịch sử làm bài</h2><p class="help">Dữ liệu được lấy từ trang Quiz của Pingo trên cùng trình duyệt và tên miền.</p><div class="table-wrap"><table><thead><tr><th>Thời gian</th><th>Ngôn ngữ</th><th>Điểm</th><th>Tỷ lệ đúng</th></tr></thead><tbody id="historyRows"></tbody></table></div><div class="actions"><button class="outline" id="export">⬇ Xuất dữ liệu JSON</button><a class="outline" style="text-decoration:none;padding:11px 15px;border-radius:11px;font-weight:700" href="quiz.html">Làm bài mới →</a></div></section>
+<div class="notice"><strong>Minh bạch dữ liệu:</strong> Pingo hiện chỉ thống kê từ đã lưu và lịch sử Quiz. Trang luyện phát âm phiên bản trước chưa lưu kết quả, vì vậy bảng này <strong>không tự nhận là đã đo tiến độ phát âm</strong>. Dữ liệu lưu bằng localStorage chỉ ở trình duyệt/thiết bị này; mở website trên một tên miền khác sẽ không thấy dữ liệu cũ. Pingo chưa kết nối Neon hay hệ thống tài khoản.</div>
+</main><footer>Pingo · Học đều mỗi ngày, tiến bộ từng bước</footer>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const wordLabels={
+"en-hello":"hello","en-learn":"learn","en-book":"book","en-friend":"friend","en-school":"school","en-practice":"practice",
+"zh-nihao":"你好","zh-xuexi":"学习","zh-pengyou":"朋友","zh-xiexie":"谢谢","zh-laoshi":"老师","zh-xuesheng":"学生"
+};
+function readArray(key){
+  try {const value=JSON.parse(localStorage.getItem(key)||"[]");return Array.isArray(value)?value:[]} catch{return []}
+}
+function load(){
+  const language=$("language").value;
+  const words=[...new Set(readArray("pingo.savedWords").filter(x=>typeof x==="string"))].filter(id=>language==="all"||id.startsWith(language+"-"));
+  const history=readArray("pingo.quizHistory").filter(x=>x&&typeof x==="object"&&["en","zh"].includes(x.language)&&Number.isFinite(x.score)&&Number.isFinite(x.total)&&x.total>0&&x.score>=0&&x.score<=x.total)
+    .filter(x=>language==="all"||x.language===language).sort((a,b)=>new Date(a.date)-new Date(b.date));
+  const total=history.reduce((n,x)=>n+x.total,0),correct=history.reduce((n,x)=>n+x.score,0),last=history.at(-1);
+  $("savedCount").textContent=words.length;
+  $("quizCount").textContent=history.length;
+  $("accuracy").textContent=total?Math.round(correct/total*100)+"%":"—";
+  $("lastScore").textContent=last?last.score+"/"+last.total:"—";
+  $("lastDetail").textContent=last?(last.language==="en"?"Tiếng Anh":"Tiếng Trung"):"Chưa có bài kiểm tra";
+  const pct=Math.min(100,Math.round(words.length/10*100));
+  $("goalText").textContent=words.length+" / 10 từ";$("goalPercent").textContent=pct+"%";$("goalBar").style.width=pct+"%";
+  $("words").replaceChildren();
+  if(!words.length){const p=document.createElement("p");p.className="empty";p.textContent="Chưa lưu từ nào."; $("words").append(p)}
+  for(const w of words){const span=document.createElement("span");span.className="word";span.textContent=wordLabels[w]||w;$("words").append(span)}
+  $("chart").replaceChildren();const recent=history.slice(-7);$("chartEmpty").hidden=recent.length>0;
+  $("chart").hidden=recent.length===0;
+  for(const [i,item] of recent.entries()){
+    const col=document.createElement("div");col.className="chart-col";
+    const score=document.createElement("strong");score.className="chart-label";score.textContent=Math.round(item.score/item.total*100)+"%";
+    const bar=document.createElement("div");bar.className="chart-bar";bar.style.height=(item.score/item.total*100)+"%";
+    const label=document.createElement("span");label.className="chart-label";label.textContent=(item.language==="en"?"EN":"ZH")+" "+(i+1);
+    col.append(score,bar,label);$("chart").append(col);
+  }
+  const rows=$("historyRows");rows.replaceChildren();
+  if(!history.length){const row=document.createElement("tr");const cell=document.createElement("td");cell.colSpan=4;cell.className="empty";cell.textContent="Chưa có lịch sử kiểm tra.";row.append(cell);rows.append(row)}
+  for(const item of history.slice().reverse().slice(0,20)){
+    const row=document.createElement("tr");
+    const date=new Date(item.date),values=[
+      Number.isNaN(date.valueOf())?"Không rõ":date.toLocaleString("vi-VN"),
+      item.language==="en"?"Tiếng Anh":"Tiếng Trung",
+      `${item.score}/${item.total}`,
+      Math.round(item.score/item.total*100)+"%"
+    ];
+    for(const value of values){const td=document.createElement("td");td.textContent=value;row.append(td)}rows.append(row);
+  }
+  $("export").onclick=()=>{
+    const snapshot={exportedAt:new Date().toISOString(),language,savedWords:words,quizHistory:history,note:"Dữ liệu lấy từ localStorage của Pingo trên thiết bị hiện tại."};
+    const blob=new Blob([JSON.stringify(snapshot,null,2)],{type:"application/json"});
+    const url=URL.createObjectURL(blob),a=document.createElement("a");
+    a.href=url;a.download="pingo-progress.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  };
+}
+$("language").addEventListener("change",load);$("refresh").addEventListener("click",load);
+window.addEventListener("storage",load);load();
+</script></body></html>'''
+path=Path("/mnt/data/progress.html")
+path.write_text(html,encoding="utf-8")
+print(f"Đã tạo {path}, {path.stat().st_size:,} bytes.")
 
