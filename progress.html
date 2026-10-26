@@ -1,7 +1,4 @@
-from pathlib import Path
-from html import escape
-
-html = r'''<!doctype html>
+<!doctype html>
 <html lang="vi">
 <head>
 <meta charset="utf-8">
@@ -120,8 +117,4 @@ function load(){
 }
 $("language").addEventListener("change",load);$("refresh").addEventListener("click",load);
 window.addEventListener("storage",load);load();
-</script></body></html>'''
-path=Path("/mnt/data/progress.html")
-path.write_text(html,encoding="utf-8")
-print(f"Đã tạo {path}, {path.stat().st_size:,} bytes.")
-
+</script></body></html>
