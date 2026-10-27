@@ -35,8 +35,12 @@ module.exports = async function handler(req, res) {
     });
     const data = await result.json();
     if (!result.ok) {
-      console.error('Gemini API error',result.status,data?.error?.status);
-      return res.status(502).json({ error:result.status===429?'Gemini đang giới hạn lượt gọi miễn phí. Hãy thử lại sau.':result.status===403?'Project Gemini chưa được cấp quyền sử dụng mô hình này.':'Không thể kết nối Gemini lúc này. Kiểm tra API key, model và hạn mức.' });
+console.error('Gemini API error', {
+  status: result.status,
+  code: data?.error?.status,
+  message: data?.error?.message,
+  reason: data?.error?.details?.[0]?.reason
+});      return res.status(502).json({ error:result.status===429?'Gemini đang giới hạn lượt gọi miễn phí. Hãy thử lại sau.':result.status===403?'Project Gemini chưa được cấp quyền sử dụng mô hình này.':'Không thể kết nối Gemini lúc này. Kiểm tra API key, model và hạn mức.' });
     }
     const answer=(data.candidates?.[0]?.content?.parts||[]).map(p=>p.text||'').join('\n').trim();
     if (!answer) return res.status(502).json({error:'AI chưa tạo được câu trả lời. Hãy thử lại.'});
