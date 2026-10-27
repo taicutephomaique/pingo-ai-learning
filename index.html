@@ -1,51 +1,143 @@
 <!doctype html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f6f8ff">
-  <title>Pingo | Học tiếng Anh & tiếng Trung</title>
-  <style>
-    :root{font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;color:#202746;background:#f6f8ff}
-    *{box-sizing:border-box}body{margin:0}button{font:inherit;cursor:pointer}a{text-decoration:none;color:inherit}
-    .shell{max-width:1180px;padding:0 24px;margin:auto}.topbar{background:#fff;border-bottom:1px solid #e8ebf8}
-    nav{height:76px;display:flex;justify-content:space-between;align-items:center;gap:20px}
-    .brand{font-size:27px;font-weight:850;color:#6256e9;letter-spacing:-1px}.brand span{color:#ff9d5c}
-    .links{display:flex;gap:26px;font-weight:600;color:#65708f;font-size:14px}.links a:hover{color:#6256e9}
-    .pill{border:0;border-radius:999px;background:#6256e9;color:#fff;padding:12px 20px;font-weight:700}
-    .hero{display:grid;grid-template-columns:1.13fr 1fr;gap:54px;align-items:center;padding-top:76px;padding-bottom:73px}
-    .eyebrow{display:inline-block;color:#6256e9;background:#ecebff;border-radius:50px;padding:9px 15px;font-weight:800;font-size:12px}
-    h1{font-size:clamp(35px,4vw,56px);line-height:1.14;letter-spacing:-2px;margin:22px 0}h1 em{font-style:normal;color:#6256e9}
-    .muted{color:#75809d;line-height:1.8}p{margin-top:0}.hero p{font-size:17px;max-width:560px}
-    .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}.secondary{border:1px solid #dbe0f6;background:white;border-radius:999px;padding:12px 20px;font-weight:700;color:#40496b}
-    .preview{background:#fff;border:1px solid #ebedfc;border-radius:28px;padding:25px;box-shadow:0 28px 65px #5b63b51a;position:relative}
-    .preview::after{content:'✦';position:absolute;right:-12px;top:-23px;color:#ffb36d;font-size:54px}.preview-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
-    .preview h2{margin:0;font-size:21px}.tag{background:#e9f8f0;color:#189568;border-radius:50px;padding:7px 12px;font-size:12px;font-weight:800}
-    .language-choice{display:flex;gap:8px;margin:22px 0}.lang{border:1px solid #e1e5f4;border-radius:12px;padding:11px 16px;background:#fff;font-weight:750;color:#66708d}.lang[aria-pressed="true"]{background:#ecebff;color:#6256e9;border-color:#aaa5fd}
-    .word{border-radius:18px;background:linear-gradient(135deg,#f1f0ff,#f8faff);padding:24px}.word-label{font-size:12px;color:#838ca4;margin:0 0 10px}.word h3{font-size:32px;margin:0 0 5px}.word .reading{color:#6658dc;font-weight:700;margin-bottom:12px}.word .meaning{font-size:15px;font-weight:750;margin-bottom:8px}.word .example{color:#75809d;font-size:13px;margin:0}
-    .demo-note{font-size:12px;color:#8b94aa;margin:14px 0 0}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:15px}.stat{background:#fff;border:1px solid #edf0fb;border-radius:15px;padding:15px 10px;text-align:center}.stat b{display:block;color:#6256e9;font-size:22px}.stat small{color:#8891a8}
-    section.features{padding:35px 0 88px}section h2.center{text-align:center;font-size:31px;letter-spacing:-.8px;margin:0 0 12px}.centerline{text-align:center;color:#7c87a1;margin:0 0 30px}
-    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card{padding:25px;background:#fff;border:1px solid #e9edfa;border-radius:20px}.emoji{width:54px;height:54px;display:grid;place-items:center;background:#f0efff;border-radius:16px;font-size:25px;margin-bottom:18px}.card h3{font-size:18px;margin:0 0 9px}.card p{color:#79839c;font-size:14px;line-height:1.7;margin:0}
-    footer{padding:26px;text-align:center;border-top:1px solid #e7eafa;color:#919ab0;font-size:13px}
-    @media(max-width:850px){.hero{grid-template-columns:1fr;gap:30px;padding-top:45px}.links{display:none}.cards{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:540px){.shell{padding:0 16px}.cards{grid-template-columns:1fr}.preview{padding:18px}.hero{padding-bottom:36px}h1{letter-spacing:-1px}.stats{gap:6px}.stat{padding:12px 6px}}
-  @media(max-width:700px){nav.shell{height:auto;min-height:76px;padding-top:16px;padding-bottom:16px;flex-wrap:wrap}.links{width:100%;justify-content:center;flex-wrap:wrap;gap:12px}.topbar .pill{display:none}}
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pingo – Học tiếng Anh & tiếng Trung</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="topbar"><nav class="shell" aria-label="Điều hướng chính"><a href="#home" class="brand">Pin<span>go</span> ✦</a><div class="links"><a href="index.html">Trang chủ</a><a href="vocabulary.html">Từ vựng</a><a href="quiz.html">Quiz</a><a href="pronunciation.html">Phát âm</a><a href="progress.html">Tiến độ</a></div><a class="pill" href="vocabulary.html">Bắt đầu học →</a></nav></header>
-  <main>
-    <div class="shell hero" id="home">
-      <div><span class="eyebrow">✦ HỌC NGOẠI NGỮ THÔNG MINH</span><h1>Học tiếng Anh & tiếng Trung <em>thú vị hơn cùng Pingo.</em></h1><p class="muted">Một không gian học tập dành cho học sinh, sinh viên. Khám phá từ vựng, luyện tập và từng bước cải thiện kỹ năng ngôn ngữ.</p><div class="actions"><a class="pill" href="vocabulary.html">Bắt đầu học →</a><a class="secondary" href="#features">Xem tính năng</a></div></div>
-      <div class="preview" id="demo"><div class="preview-head"><h2>📚 Góc học từ vựng</h2><span class="tag">Học thử</span></div><div class="language-choice" role="group" aria-label="Chọn ngôn ngữ"><button class="lang" id="en" aria-pressed="true">🇬🇧 Tiếng Anh</button><button class="lang" id="zh" aria-pressed="false">🇨🇳 Tiếng Trung</button></div><div class="word" aria-live="polite"><p class="word-label">TỪ VỰNG HÔM NAY</p><h3 id="term">Adventure</h3><div class="reading" id="reading">/ədˈven.tʃər/</div><div class="meaning" id="meaning">Cuộc phiêu lưu</div><p class="example" id="example">Example: Learning a language is an adventure.</p></div><p class="demo-note">* Dữ liệu minh họa. Các chức năng AI và theo dõi học tập sẽ được phát triển ở bước sau.</p><div class="stats"><div class="stat"><b>2</b><small>Ngôn ngữ</small></div><div class="stat"><b>4</b><small>Hướng tính năng</small></div><div class="stat"><b>1</b><small>Mục tiêu học tập</small></div></div></div>
+  <header class="header">
+    <div class="container nav">
+      <div class="logo">🐾 <span>Pingo</span></div>
+      <nav class="menu">
+        <a href="index.html">Trang chủ</a>
+        <a href="vocabulary.html">Từ vựng</a>
+        <a href="quiz.html">Quiz</a>
+        <a href="pronunciation.html">Phát âm</a>
+        <a href="progress.html">Tiến độ</a>
+        <a href="tutor.html">AI Tutor</a>
+      </nav>
+      <a class="btn btn-primary" href="vocabulary.html">Bắt đầu học</a>
     </div>
-    <section class="features shell" id="features"><h2 class="center">Học ngoại ngữ theo cách của bạn</h2><p class="centerline">Bốn tính năng bạn có thể khám phá trên Pingo</p><div class="cards"><article class="card"><div class="emoji">📖</div><h3><a href="vocabulary.html">Học từ vựng →</a></h3><p>Tra nghĩa, phiên âm, ví dụ và lưu từ cần ôn tập.</p></article><article class="card"><div class="emoji">🧠</div><h3><a href="quiz.html">Trắc nghiệm →</a></h3><p>Luyện tập với câu hỏi trắc nghiệm và giải thích đáp án.</p></article><article class="card"><div class="emoji">🎙️</div><h3><a href="pronunciation.html">Luyện phát âm →</a></h3><p>Nghe mẫu, tập đọc và xem kết quả nhận diện giọng nói trên trình duyệt.</p></article><article class="card"><div class="emoji">📈</div><h3><a href="progress.html">Tiến độ học tập →</a></h3><p>Theo dõi số từ đã học, kết quả kiểm tra và lịch sử ôn tập.</p></article></div></section>
-  </main><footer>© 2026 Pingo · Dự án học tập Anh – Trung có định hướng ứng dụng AI.</footer>
-  <script>
-    const samples={en:{term:'Adventure',reading:'/ədˈven.tʃər/',meaning:'Cuộc phiêu lưu',example:'Example: Learning a language is an adventure.'},zh:{term:'学习',reading:'xuéxí',meaning:'Học tập',example:'Ví dụ: 我喜欢学习中文。 (Tôi thích học tiếng Trung.)'}};
-    function showLanguage(language){const d=samples[language];for(const field of ['term','reading','meaning','example'])document.getElementById(field).textContent=d[field];for(const code of ['en','zh'])document.getElementById(code).setAttribute('aria-pressed',String(code===language));}
-    document.getElementById('en').addEventListener('click',()=>showLanguage('en'));
-    document.getElementById('zh').addEventListener('click',()=>showLanguage('zh'));
-  </script>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-text">
+          <span class="badge">HỌC NGOẠI NGỮ THÔNG MINH</span>
+          <h1>Học tiếng Anh & tiếng Trung <br><span>thú vị hơn cùng Pingo</span></h1>
+          <p>
+            Một không gian học tập dành cho học sinh, sinh viên.
+            Khám phá từ vựng, luyện tập, luyện nói và nhận hỗ trợ từ AI Tutor.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="vocabulary.html">Bắt đầu học ngay</a>
+            <a class="btn btn-secondary" href="tutor.html">Học cùng AI</a>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <div class="mascot-box">
+            <img src="https://placehold.co/340x260/png?text=Pingo+Mascot" alt="Pingo mascot" />
+          </div>
+          <div class="mini-card">
+            <h3>Góc học từ vựng</h3>
+            <div class="lang-switch">
+              <button>Tiếng Anh</button>
+              <button>Tiếng Trung</button>
+            </div>
+            <div class="word-card">
+              <small>TỪ VỰNG HÔM NAY</small>
+              <h2>Adventure</h2>
+              <p>/ədˈven.tʃɚ/</p>
+              <strong>Cuộc phiêu lưu</strong>
+            </div>
+            <div class="mini-stats">
+              <div><b>2</b><span>Ngày liên tiếp</span></div>
+              <div><b>4</b><span>Hoạt động hằng ngày</span></div>
+              <div><b>1</b><span>Mục tiêu học tập</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features section">
+      <div class="container">
+        <h2 class="section-title">Tính năng nổi bật</h2>
+        <p class="section-subtitle">Học đều đặn – Luyện đều đặn – Tiến bộ mỗi ngày</p>
+
+        <div class="feature-grid">
+          <a class="feature-card" href="vocabulary.html">
+            <div class="icon">📘</div>
+            <h3>Từ vựng</h3>
+            <p>Học flashcards, nghĩa, phiên âm và ví dụ.</p>
+          </a>
+
+          <a class="feature-card" href="quiz.html">
+            <div class="icon">📝</div>
+            <h3>Luyện tập</h3>
+            <p>Trắc nghiệm, điền từ, câu hỏi ngắn.</p>
+          </a>
+
+          <a class="feature-card" href="pronunciation.html">
+            <div class="icon">🎤</div>
+            <h3>Luyện nói</h3>
+            <p>Nghe, phát âm và nhận phản hồi cơ bản.</p>
+          </a>
+
+          <a class="feature-card" href="progress.html">
+            <div class="icon">📊</div>
+            <h3>Tiến độ</h3>
+            <p>Theo dõi kết quả học tập và lịch sử học.</p>
+          </a>
+
+          <a class="feature-card" href="tutor.html">
+            <div class="icon">🤖</div>
+            <h3>AI Tutor</h3>
+            <p>Hỏi từ vựng, ngữ pháp, tạo ví dụ và trắc nghiệm.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="preview section">
+      <div class="container">
+        <h2 class="section-title">Trải nghiệm học tập trực quan</h2>
+        <div class="preview-grid">
+          <div class="preview-card">
+            <h3>Học từ vựng</h3>
+            <p><b>beautiful</b> /ˈbjuː.tɪ.fəl/</p>
+            <p>Nghĩa: đẹp, xinh đẹp</p>
+          </div>
+
+          <div class="preview-card">
+            <h3>Quiz</h3>
+            <p>What does “你好” mean?</p>
+            <ul>
+              <li>Hello</li>
+              <li>Thank you</li>
+              <li>Goodbye</li>
+            </ul>
+          </div>
+
+          <div class="preview-card">
+            <h3>AI Tutor</h3>
+            <p><b>Người dùng:</b> Giải thích từ 你好</p>
+            <p><b>Pingo AI:</b> “你好” nghĩa là xin chào...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p><b>Pingo</b> – Người bạn đồng hành trên hành trình học ngoại ngữ của bạn.</p>
+      <p>Nhóm dự án: Website hỗ trợ học tiếng Anh & tiếng Trung bằng AI</p>
+    </div>
+  </footer>
 </body>
 </html>
