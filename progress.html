@@ -40,11 +40,24 @@ footer{text-align:center;color:#8189a0;font-size:12px;padding:36px 15px}
 @media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}}
 @media(max-width:550px){.stats{grid-template-columns:1fr 1fr;gap:10px}.stat{padding:15px}.stat .number{font-size:27px}.hero{padding:23px}th,td{padding:10px 7px}}
 </style>
-</head>
+<style>
+:root{--sky:#7db3ff;--peach:#ffb277;--cream:#fff8ed;--ink:#344454;--lav:#c9b8ff}
+body{background:linear-gradient(145deg,#fff8ed,#f0f8ff)!important;color:var(--ink)!important}
+header{background:#fffefb!important;border-color:#f1e7d9!important}header strong,.logo{color:#2b477c!important}
+nav a{color:#415b83!important}nav a:hover{color:#f28b43!important}
+.eyebrow{color:#f28b43!important}.panel,.stat{border-color:#f4e8d9!important;box-shadow:0 12px 32px #355d8710!important}
+button,.hero{background:linear-gradient(110deg,#fa985d,#ffb777)!important;color:#24345a!important}
+button.secondary,.refresh{background:#e2f0ff!important;color:#30589d!important}
+.reading,.score,.stat .number{color:#447fc5!important}
+.status,.word{background:#edf6ff!important;color:#33577e!important}
+.notice{background:#fff0d9!important;color:#72552f!important}
+.card,.panel,.stat{border-radius:24px!important}
+button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #7db3ff;outline-offset:3px}
+</style></head>
 <body>
-<header><div class="nav"><a class="logo" href="index.html">🐧 Pingo</a><nav>
+<header><div class="nav"><a class="logo" href="index.html">🦊 Pingo</a><nav>
 <a href="index.html">Trang chủ</a><a href="vocabulary.html">Từ vựng</a><a href="quiz.html">Trắc nghiệm</a><a href="pronunciation.html">Phát âm</a><a href="progress.html" aria-current="page">Tiến độ</a>
-</nav></div></header>
+<a href="tutor.html">AI Tutor</a><a href="test.html">Kiểm thử</a></nav></div></header>
 <main>
 <section class="hero"><div><h1>📈 Tiến độ học tập</h1><p>Nhìn lại những gì bạn đã học và lên kế hoạch luyện tập tiếp theo.</p></div><button class="refresh" id="refresh">↻ Cập nhật thống kê</button></section>
 <div class="toolbar"><label for="language">Thống kê theo ngôn ngữ</label><select id="language"><option value="all">Cả hai ngôn ngữ</option><option value="en">Tiếng Anh</option><option value="zh">Tiếng Trung</option></select></div>
@@ -52,14 +65,14 @@ footer{text-align:center;color:#8189a0;font-size:12px;padding:36px 15px}
 <div class="stat"><div class="label">📚 Từ vựng đã lưu</div><div class="number" id="savedCount">0</div><p>Đang nằm trong danh sách ôn tập</p></div>
 <div class="stat"><div class="label">📝 Bài Quiz đã làm</div><div class="number" id="quizCount">0</div><p>Số bài đã hoàn thành</p></div>
 <div class="stat"><div class="label">🎯 Tỷ lệ trả lời đúng</div><div class="number" id="accuracy">—</div><p>Tổng câu đúng / tổng câu đã làm</p></div>
-<div class="stat"><div class="label">🏅 Điểm bài gần nhất</div><div class="number" id="lastScore">—</div><p id="lastDetail">Chưa có bài kiểm tra</p></div>
+<div class="stat"><div class="label">🎙️ Lượt luyện nói</div><div class="number" id="speakingCount">0</div><p>Tính lượt có kết quả nhận diện</p></div><div class="stat"><div class="label">🏅 Điểm bài gần nhất</div><div class="number" id="lastScore">—</div><p id="lastDetail">Chưa có bài kiểm tra</p></div>
 </section>
 <section class="two">
 <div class="panel"><h2>Kết quả các bài Quiz gần đây</h2><p class="help">Hiển thị tối đa 7 bài gần nhất, theo thang phần trăm.</p><div id="chart" role="img" aria-label="Biểu đồ điểm các bài trắc nghiệm gần đây"></div><p id="chartEmpty" class="empty" hidden>Chưa có dữ liệu. Hãy hoàn thành một bài Quiz trước nhé.</p></div>
 <div class="panel"><h2>Mục tiêu ôn từ vựng</h2><p class="help">Mốc gợi ý: lưu 10 từ để tạo danh sách ôn tập đầu tiên (không phải thước đo năng lực).</p><div class="flex"><strong id="goalText">0 / 10 từ</strong><span id="goalPercent">0%</span></div><div class="bar-track"><div class="bar" id="goalBar"></div></div><p class="help" style="margin-top:17px">Lưu từ mới tại <a href="vocabulary.html">trang Từ vựng</a>.</p><h2 style="margin-top:25px">Các từ đã lưu</h2><div class="words" id="words"></div></div>
 </section>
 <section class="panel full"><h2>📅 Lịch sử làm bài</h2><p class="help">Dữ liệu được lấy từ trang Quiz của Pingo trên cùng trình duyệt và tên miền.</p><div class="table-wrap"><table><thead><tr><th>Thời gian</th><th>Ngôn ngữ</th><th>Điểm</th><th>Tỷ lệ đúng</th></tr></thead><tbody id="historyRows"></tbody></table></div><div class="actions"><button class="outline" id="export">⬇ Xuất dữ liệu JSON</button><a class="outline" style="text-decoration:none;padding:11px 15px;border-radius:11px;font-weight:700" href="quiz.html">Làm bài mới →</a></div></section>
-<div class="notice"><strong>Minh bạch dữ liệu:</strong> Pingo hiện chỉ thống kê từ đã lưu và lịch sử Quiz. Trang luyện phát âm phiên bản trước chưa lưu kết quả, vì vậy bảng này <strong>không tự nhận là đã đo tiến độ phát âm</strong>. Dữ liệu lưu bằng localStorage chỉ ở trình duyệt/thiết bị này; mở website trên một tên miền khác sẽ không thấy dữ liệu cũ. Pingo chưa kết nối Neon hay hệ thống tài khoản.</div>
+<div class="notice"><strong>Minh bạch dữ liệu:</strong> Pingo hiện chỉ thống kê từ đã lưu và lịch sử Quiz. Lượt nói được lưu từ phiên bản mới. Tỷ lệ khớp chỉ đo văn bản máy nhận diện được, <strong>không phải điểm chất lượng phát âm</strong>. Dữ liệu lưu bằng localStorage chỉ ở trình duyệt/thiết bị này; mở website trên một tên miền khác sẽ không thấy dữ liệu cũ. Pingo chưa kết nối Neon hay hệ thống tài khoản.</div>
 </main><footer>Pingo · Học đều mỗi ngày, tiến bộ từng bước</footer>
 <script>
 "use strict";
@@ -74,6 +87,8 @@ function readArray(key){
 function load(){
   const language=$("language").value;
   const words=[...new Set(readArray("pingo.savedWords").filter(x=>typeof x==="string"))].filter(id=>language==="all"||id.startsWith(language+"-"));
+  const speaking=readArray("pingo.speakingHistory").filter(x=>x&&["en","zh"].includes(x.language)&&Number.isFinite(x.match)).filter(x=>language==="all"||x.language===language);
+  $("speakingCount").textContent=speaking.length;
   const history=readArray("pingo.quizHistory").filter(x=>x&&typeof x==="object"&&["en","zh"].includes(x.language)&&Number.isFinite(x.score)&&Number.isFinite(x.total)&&x.total>0&&x.score>=0&&x.score<=x.total)
     .filter(x=>language==="all"||x.language===language).sort((a,b)=>new Date(a.date)-new Date(b.date));
   const total=history.reduce((n,x)=>n+x.total,0),correct=history.reduce((n,x)=>n+x.score,0),last=history.at(-1);
@@ -109,7 +124,7 @@ function load(){
     for(const value of values){const td=document.createElement("td");td.textContent=value;row.append(td)}rows.append(row);
   }
   $("export").onclick=()=>{
-    const snapshot={exportedAt:new Date().toISOString(),language,savedWords:words,quizHistory:history,note:"Dữ liệu lấy từ localStorage của Pingo trên thiết bị hiện tại."};
+    const snapshot={exportedAt:new Date().toISOString(),language,savedWords:words,quizHistory:history,speakingHistory:speaking,note:"Dữ liệu lấy từ localStorage của Pingo trên thiết bị hiện tại."};
     const blob=new Blob([JSON.stringify(snapshot,null,2)],{type:"application/json"});
     const url=URL.createObjectURL(blob),a=document.createElement("a");
     a.href=url;a.download="pingo-progress.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
